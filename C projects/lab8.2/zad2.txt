@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#define N 20
+
+union unia{
+	int calk;
+	double liczb;
+};
+
+struct liczba {
+	union unia;
+	char typ;
+	
+	
+}pok;
+
+void wypisz(struct liczba *tab);
+
+int main()
+{
+	FILE *wp;
+	srand(time(0));
+	struct liczba tab[N],*tab2;
+	int i,pom=0,x;
+	for(i=0;i<N;i++)
+		{
+			pom=rand()%2;
+			if(pom%2==0)
+				{ tab[i].typ='d';
+					}	
+			else tab[i].typ='i';
+			if(tab[i].typ=='i')
+				tab[i].calk=rand()%30;
+			else tab[i].liczb=(double)(rand()%(int)(201))/100;
+			
+		}
+	
+	wypisz(tab);
+	
+	int sprawdz,licznik=0;
+	
+	wp=fopen("plik.txt","wb+");
+	if(wp==NULL)
+		{printf("Nie mozna otworzyc");
+		exit(EXIT_FAILURE);}
+   	else 
+		printf("jest ok\n");
+
+	fwrite(tab,sizeof(struct liczba),N,wp);
+	fclose(wp);
+	wp=fopen("plik.txt","r+");
+	//rewind(wp);
+//	fclose(wp);
+	//setvbuf(wp,NULL,_IOFBF,2048);
+	tab2=malloc(N*sizeof(struct liczba));
+	fread(tab2,sizeof(struct liczba),N,wp);
+	printf("%d\n",sprawdz);
+
+
+
+	wypisz(tab2);
+	
+	//rewind(wp);
+//	while(fseek(wp,1L,SEEK_SET)==0)
+//	{
+//			licznik++;}
+//	printf("%d\n",licznik); 
+	return 0;
+}
+	
+		
+
+
+void wypisz(struct liczba *tab){
+	int i;
+	for (i=0;i<N;i++)
+		{
+			if((tab+i)->typ=='i')
+			{
+			printf("%15d\ttyp:%c\n",(tab+i)->calk,(tab+i)->typ);
+			
+			}else 
+			{
+				printf("%15lf\ttyp:%c\n",(tab+i)->liczb,(tab+i)->typ);
+			}
+	}
+
+	
+	
+}
